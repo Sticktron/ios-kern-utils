@@ -23,8 +23,11 @@ vm_size_t read_kernel(vm_address_t addr, vm_size_t size, unsigned char* buf)
     vm_size_t bytes_read = 0;
 
     ret = task_for_pid(mach_task_self(), 0, &kernel_task);
-    if (ret != KERN_SUCCESS)
-        return -1;
+    if (ret != KERN_SUCCESS){
+        host_get_special_port (mach_host_self(), HOST_LOCAL_NODE, 4, &kernel_task);
+        if (kernel_task == MACH_PORT_NULL)
+            return -1;
+    }
 
     vm_address_t end = addr + size;
 
@@ -53,8 +56,11 @@ vm_size_t write_kernel(vm_address_t addr, unsigned char* data, vm_size_t size)
     vm_size_t bytes_written = 0;
 
     ret = task_for_pid(mach_task_self(), 0, &kernel_task);
-    if (ret != KERN_SUCCESS)
-        return -1;
+    if (ret != KERN_SUCCESS){
+        host_get_special_port (mach_host_self(), HOST_LOCAL_NODE, 4, &kernel_task);
+        if (kernel_task == MACH_PORT_NULL)
+            return -1;
+    }
 
     vm_address_t end = addr + size;
 

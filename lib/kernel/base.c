@@ -30,8 +30,13 @@ vm_address_t get_kernel_base()
     vm_address_t addr = 0x81200000;         // lowest possible kernel base address
 
     ret = task_for_pid(mach_task_self(), 0, &kernel_task);
-    if (ret != KERN_SUCCESS)
-        return 0;
+    if (ret != KERN_SUCCESS){
+        host_get_special_port (mach_host_self(), HOST_LOCAL_NODE, 4, &kernel_task);
+        if (kernel_task == MACH_PORT_NULL)
+            return 0;
+    }
+        
+    
 
     while (1) {
         // get next memory region

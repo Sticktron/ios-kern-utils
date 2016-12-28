@@ -21,7 +21,7 @@ add_subdirectory(lib/kernel)
 add_subdirectory(lib/binary)
 
 # build tools
-set(TOOLS kdump kmap kmem kpatch)
+set(TOOLS kdump kmap kmem kpatch nonceEnabler)
 foreach(tool ${TOOLS})
     message("preparing ${tool}")
     add_executable(${tool} tools/${tool}.c)
